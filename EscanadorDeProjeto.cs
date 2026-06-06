@@ -2,9 +2,9 @@
 
 namespace dif
 {
-    public class EscaneadorDeProjeto(string[] pastasIgnoradas)
+    public class EscaneadorDeArquivos(string[] pastasIgnoradas)
     {
-        public RelatorioDeCodigo AnalisarPasta(string caminho, bool mostrarDetalhes, int profundidade = 1)
+        public RelatorioDeCodigo AnalisarPasta(string caminho, bool mostrarDetalhes, string? extensoesAnalise, int profundidade = 1)
         {
             var pasta = new DirectoryInfo(caminho);
             int _totalLinhas = 0;
@@ -17,6 +17,9 @@ namespace dif
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(arquivo.Extension) || (extensoesAnalise is not null && !extensoesAnalise.Contains(arquivo.Extension)))
+                        continue;
+
                     _totalLinhas += File.ReadLines(arquivo.FullName).Count();
                     _totalArquivos += 1;
                     
@@ -28,7 +31,6 @@ namespace dif
                     if (mostrarDetalhes)
                     {
                         string detalhe = $"[gray]{(_profundidade > 1 ? "|" : "")}[/] Lendo arquivo: [yellow]{arquivo.Name}[/]: {_totalLinhas}";
-
                         AnsiConsole.MarkupLine($"{detalhe.PadLeft(_profundidade + detalhe.Length)}");
                     }
                 }
@@ -55,11 +57,12 @@ namespace dif
                     AnsiConsole.MarkupLine(detalhe.PadLeft(profundidadeAtual + detalhe.Length));
                 }
 
-                var relatorioDaSubpasta = AnalisarPasta(subpasta.FullName, mostrarDetalhes, profundidadeAtual);
+                var relatorioDaSubpasta = AnalisarPasta(subpasta.FullName, mostrarDetalhes, extensoesAnalise, profundidadeAtual);
 
                 _totalLinhas += relatorioDaSubpasta.TotalLinhas;
                 _totalArquivos += relatorioDaSubpasta.TotalArquivos;
                 _profundidade = profundidadeAtual;
+
                 foreach (var kvp in relatorioDaSubpasta.LinhasPorExtensao)
                 {
                     if (!linhasPorExtensao.ContainsKey(kvp.Key))
@@ -72,6 +75,4 @@ namespace dif
             return new(_totalArquivos, _totalLinhas, linhasPorExtensao);
         }
     }
-
-
 }

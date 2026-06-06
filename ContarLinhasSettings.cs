@@ -1,8 +1,5 @@
 ﻿using Spectre.Console.Cli;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace dif
 {
@@ -19,5 +16,9 @@ namespace dif
         [CommandOption("-d|--detalhes")]
         [Description("Mostra os arquivos lidos um por um no terminal")] 
         public bool MostrarDetalhes { get; set; }
+
+        [CommandOption("-e|--ext <EXTENSOES>")]
+        [Description("Extensões de arquivos a serem consideradas na análise(Se vázio, todas extensões serão consideradas).")]
+        public string? ExtensoesExclusivas { get; set; }
     }
 }

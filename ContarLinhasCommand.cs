@@ -19,7 +19,7 @@ namespace dif
                 AnsiConsole.MarkupLine("[gray]Modo detalhado ativado...[/]");
 
             RelatorioDeCodigo resultado = 
-                new EscaneadorDeProjeto(ignorados).AnalisarPasta(caminho, settings.MostrarDetalhes);
+                new EscaneadorDeArquivos(ignorados).AnalisarPasta(caminho, settings.MostrarDetalhes, settings.ExtensoesExclusivas);
 
             AnsiConsole.MarkupLine($"Total de Arquivos: [yellow]{resultado.TotalArquivos}[/]");
             AnsiConsole.MarkupLine($"Total de Linhas: [yellow]{resultado.TotalLinhas}[/]");
