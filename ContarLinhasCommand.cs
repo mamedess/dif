@@ -23,6 +23,9 @@ namespace dif
 
             AnsiConsole.MarkupLine($"Total de Arquivos: [yellow]{resultado.TotalArquivos}[/]");
             AnsiConsole.MarkupLine($"Total de Linhas: [yellow]{resultado.TotalLinhas}[/]");
+            AnsiConsole.MarkupLine($"Total de Linhas Por Extensão: ");
+            foreach(var kvp in resultado.LinhasPorExtensao)
+                AnsiConsole.MarkupLine($"{kvp.Key}: [yellow]{kvp.Value}[/]");
 
             return 0;
         }
