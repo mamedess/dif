@@ -1,25 +1,36 @@
-﻿namespace dif
+﻿using Spectre.Console;
+
+namespace dif
 {
     public class EscaneadorDeProjeto(string[] pastasIgnoradas)
     {
-        public RelatorioDeCodigo AnalisarPasta(string caminho)
+        public RelatorioDeCodigo AnalisarPasta(string caminho, bool mostrarDetalhes, int profundidade = 1)
         {
             var pasta = new DirectoryInfo(caminho);
-            int totalLinhas = 0;
-            int totalArquivos = 0;
+            int _totalLinhas = 0;
+            int _totalArquivos = 0;
+            int _profundidade = profundidade;
+
             Dictionary<string,int> linhasPorExtensao = [];
 
             foreach (var arquivo in pasta.GetFiles())
             {
                 try
                 {
-                    totalLinhas += File.ReadLines(arquivo.FullName).Count();
-                    totalArquivos += 1;
+                    _totalLinhas += File.ReadLines(arquivo.FullName).Count();
+                    _totalArquivos += 1;
                     
                     if (!linhasPorExtensao.ContainsKey(arquivo.Extension))
                         linhasPorExtensao[arquivo.Extension] = 0;
 
-                    linhasPorExtensao[arquivo.Extension] = totalLinhas;
+                    linhasPorExtensao[arquivo.Extension] = _totalLinhas;
+                    
+                    if (mostrarDetalhes)
+                    {
+                        string detalhe = $"[gray]{(_profundidade > 1 ? "|" : "")}[/] Lendo arquivo: [yellow]{arquivo.Name}[/]: {_totalLinhas}";
+
+                        AnsiConsole.MarkupLine($"{detalhe.PadLeft(_profundidade + detalhe.Length)}");
+                    }
                 }
                 catch (IOException)
                 {
@@ -36,10 +47,19 @@
                 if (pastasIgnoradas.Contains(subpasta.Name))
                     continue;
 
-                var relatorioDaSubpasta = AnalisarPasta(subpasta.FullName);
+                int profundidadeAtual = _profundidade + 1;
+                
+                if (mostrarDetalhes)
+                {
+                    string detalhe = $"Lendo subpasta: [yellow]{subpasta.Name}[/]";
+                    AnsiConsole.MarkupLine(detalhe.PadLeft(profundidadeAtual + detalhe.Length));
+                }
 
-                totalLinhas += relatorioDaSubpasta.TotalLinhas;
-                totalArquivos += relatorioDaSubpasta.TotalArquivos;
+                var relatorioDaSubpasta = AnalisarPasta(subpasta.FullName, mostrarDetalhes, profundidadeAtual);
+
+                _totalLinhas += relatorioDaSubpasta.TotalLinhas;
+                _totalArquivos += relatorioDaSubpasta.TotalArquivos;
+                _profundidade = profundidadeAtual;
                 foreach (var kvp in relatorioDaSubpasta.LinhasPorExtensao)
                 {
                     if (!linhasPorExtensao.ContainsKey(kvp.Key))
@@ -49,7 +69,7 @@
                 }
             }
 
-            return new(totalArquivos, totalLinhas, linhasPorExtensao);
+            return new(_totalArquivos, _totalLinhas, linhasPorExtensao);
         }
     }
 
