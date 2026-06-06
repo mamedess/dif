@@ -1,4 +1,4 @@
-# 📊 dif de Linhas CLI
+# 📊 Contador de Linhas CLI
 
 Uma ferramenta de linha de comando (CLI) rápida e extremamente leve para contar linhas de código em projetos de software. Construída em C# e .NET, ela varre seus diretórios de forma inteligente, lidando com pastas gigantes e arquivos bloqueados sem travar o seu computador.
 
