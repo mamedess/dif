@@ -11,9 +11,11 @@ namespace dif
             string caminho = settings.Caminho ?? EncontrarRaizDoProjeto(Environment.CurrentDirectory);
             string[] ignorados = settings.PastasIgnoradas?.Split(',') ?? [];
             string ignoradosTexto = ignorados.Length == 0 ? "(nenhuma)" : string.Join(", ", ignorados);
+            string considerandoExtensoesTexto = settings.ExtensoesExclusivas is null || settings.ExtensoesExclusivas.Length == 0 ? "(todas)" : string.Join(", ", settings.ExtensoesExclusivas);
 
             AnsiConsole.MarkupLine($"[green]Iniciando análise em:[/] {caminho}");
             AnsiConsole.MarkupLine($"[yellow]Ignorando as pastas:[/] {Markup.Escape(ignoradosTexto)}");
+            AnsiConsole.MarkupLine($"[yellow]Considerando as extensões:[/] {Markup.Escape(considerandoExtensoesTexto)}");
 
             if (settings.MostrarDetalhes)
                 AnsiConsole.MarkupLine("[gray]Modo detalhado ativado...[/]");

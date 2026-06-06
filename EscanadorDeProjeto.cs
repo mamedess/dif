@@ -26,7 +26,7 @@ namespace dif
                     if (!linhasPorExtensao.ContainsKey(arquivo.Extension))
                         linhasPorExtensao[arquivo.Extension] = 0;
 
-                    linhasPorExtensao[arquivo.Extension] = _totalLinhas;
+                    linhasPorExtensao[arquivo.Extension] = File.ReadLines(arquivo.FullName).Count();
                     
                     if (mostrarDetalhes)
                     {
