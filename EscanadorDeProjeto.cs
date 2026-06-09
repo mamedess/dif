@@ -30,7 +30,7 @@ namespace dif
                     
                     if (mostrarDetalhes)
                     {
-                        string detalhe = $"[gray]{(_profundidade > 1 ? "|" : "")}[/] Lendo arquivo: [yellow]{arquivo.Name}[/]: {_totalLinhas}";
+                        string detalhe = $"[gray]{(_profundidade > 1 ? "├─" : "")}[/] Lendo arquivo: [yellow]{arquivo.Name}[/]: {_totalLinhas}";
                         AnsiConsole.MarkupLine($"{detalhe.PadLeft(_profundidade + detalhe.Length)}");
                     }
                 }
